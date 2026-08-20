@@ -9,7 +9,7 @@ export default function AppLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-slate-950">
+    <div className="min-h-screen bg-[#030712] text-slate-300 font-sans selection:bg-cyan-500/30">
       <Sidebar
         collapsed={collapsed}
         onToggle={() => setCollapsed(!collapsed)}
@@ -17,7 +17,7 @@ export default function AppLayout() {
         onMobileClose={() => setMobileOpen(false)}
       />
 
-      <Header onToggleSidebar={() => setMobileOpen(!mobileOpen)} />
+      <Header onToggleSidebar={() => setMobileOpen(!mobileOpen)} isSidebarCollapsed={collapsed} />
 
       <main
         className={`pt-16 min-h-screen transition-all duration-300 ${
