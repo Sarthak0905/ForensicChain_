@@ -66,55 +66,59 @@ export default function ProfilePage() {
   };
 
   return (
-    <div>
-      <PageHeader title="Profile" description="Manage your account settings and security" />
+    <div className="space-y-6 max-w-5xl mx-auto">
+      <div>
+        <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Account Settings</h1>
+        <p className="text-sm text-slate-500 mt-1">Manage your profile, security, and preferences</p>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left: Forms */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Profile Info */}
-          <div className="bg-slate-900 rounded-xl border border-slate-700/50 p-5">
-            <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-              <User className="w-4 h-4 text-cyan-400" /> Profile Information
+          
+          {/* Profile Details */}
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <User className="w-4 h-4 text-blue-600" /> Personal Information
             </h3>
             <form onSubmit={handleUpdateProfile} className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">First Name</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">First Name</label>
                   <input
                     type="text"
                     name="firstName"
                     value={profileForm.firstName}
                     onChange={handleProfileChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Last Name</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Last Name</label>
                   <input
                     type="text"
                     name="lastName"
                     value={profileForm.lastName}
                     onChange={handleProfileChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">Organization</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Organization</label>
                 <input
                   type="text"
                   name="organizationName"
                   value={profileForm.organizationName}
                   onChange={handleProfileChange}
-                  className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                   placeholder="Optional"
                 />
               </div>
               <button
                 type="submit"
                 disabled={savingProfile}
-                className="px-4 py-2 bg-cyan-600 hover:bg-cyan-700 disabled:bg-cyan-800 text-white rounded-lg text-sm font-medium transition-colors"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-800 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
               >
                 {savingProfile ? 'Saving...' : 'Save Changes'}
               </button>
@@ -122,26 +126,26 @@ export default function ProfilePage() {
           </div>
 
           {/* Change Password */}
-          <div className="bg-slate-900 rounded-xl border border-slate-700/50 p-5">
-            <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-              <Lock className="w-4 h-4 text-purple-400" /> Change Password
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Lock className="w-4 h-4 text-purple-600" /> Change Password
             </h3>
             <form onSubmit={handleChangePassword} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-1.5">Current Password</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Current Password</label>
                 <div className="relative">
                   <input
                     type={showPasswords ? 'text' : 'password'}
                     name="currentPassword"
                     value={passwordForm.currentPassword}
                     onChange={handlePasswordChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors pr-10"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors pr-10"
                     required
                   />
                   <button
                     type="button"
                     onClick={() => setShowPasswords(!showPasswords)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                   >
                     {showPasswords ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
@@ -149,26 +153,26 @@ export default function ProfilePage() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">New Password</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">New Password</label>
                   <input
                     type={showPasswords ? 'text' : 'password'}
                     name="newPassword"
                     value={passwordForm.newPassword}
                     onChange={handlePasswordChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                     placeholder="Min 8 characters"
                     required
                     minLength={8}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-300 mb-1.5">Confirm New Password</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5">Confirm New Password</label>
                   <input
                     type={showPasswords ? 'text' : 'password'}
                     name="confirmPassword"
                     value={passwordForm.confirmPassword}
                     onChange={handlePasswordChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                     required
                   />
                 </div>
@@ -176,7 +180,7 @@ export default function ProfilePage() {
               <button
                 type="submit"
                 disabled={savingPassword}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 text-white rounded-lg text-sm font-medium transition-colors"
+                className="px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-purple-800 text-white rounded-lg text-sm font-medium transition-colors shadow-sm"
               >
                 {savingPassword ? 'Changing...' : 'Change Password'}
               </button>
@@ -186,43 +190,43 @@ export default function ProfilePage() {
 
         {/* Right: Account Info */}
         <div className="space-y-6">
-          <div className="bg-slate-900 rounded-xl border border-slate-700/50 p-5">
-            <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
-              <Shield className="w-4 h-4 text-emerald-400" /> Account Details
+          <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h3 className="text-base font-semibold text-slate-900 mb-4 flex items-center gap-2">
+              <Shield className="w-4 h-4 text-emerald-600" /> Account Details
             </h3>
             <div className="space-y-3">
               <div>
-                <p className="text-xs text-slate-500">Email</p>
-                <p className="text-sm text-white">{user?.email || '—'}</p>
+                <p className="text-xs text-slate-500 font-medium">Email</p>
+                <p className="text-sm font-medium text-slate-900">{user?.email || '—'}</p>
               </div>
               <div>
-                <p className="text-xs text-slate-500">Role</p>
+                <p className="text-xs text-slate-500 font-medium">Role</p>
                 <div className="mt-0.5">
                   <StatusBadge type="role" value={user?.role} />
                 </div>
               </div>
               <div>
-                <p className="text-xs text-slate-500">Account Status</p>
-                <p className={`text-sm ${user?.isActive ? 'text-emerald-400' : 'text-red-400'}`}>
+                <p className="text-xs text-slate-500 font-medium">Account Status</p>
+                <p className={`text-sm font-medium ${user?.isActive ? 'text-emerald-600' : 'text-red-600'}`}>
                   {user?.isActive ? '● Active' : '● Inactive'}
                 </p>
               </div>
               <div>
-                <p className="text-xs text-slate-500">Verified</p>
-                <p className={`text-sm ${user?.isVerified ? 'text-emerald-400' : 'text-yellow-400'}`}>
-                  {user?.isVerified ? '✓ Verified' : '○ Unverified'}
+                <p className="text-xs text-slate-500 font-medium">Verified</p>
+                <p className={`text-sm font-medium ${user?.isVerified ? 'text-emerald-600' : 'text-yellow-600'}`}>
+                  {user?.isVerified ? '✓ Verified' : '⚠ Unverified'}
                 </p>
               </div>
               {user?.lastLogin && (
                 <div>
-                  <p className="text-xs text-slate-500">Last Login</p>
-                  <p className="text-sm text-slate-300">{format(new Date(user.lastLogin), 'PPpp')}</p>
+                  <p className="text-xs text-slate-500 font-medium">Last Login</p>
+                  <p className="text-sm font-medium text-slate-700">{format(new Date(user.lastLogin), 'PPpp')}</p>
                 </div>
               )}
               {user?.createdAt && (
                 <div>
-                  <p className="text-xs text-slate-500">Member Since</p>
-                  <p className="text-sm text-slate-300">{format(new Date(user.createdAt), 'PP')}</p>
+                  <p className="text-xs text-slate-500 font-medium">Member Since</p>
+                  <p className="text-sm font-medium text-slate-700">{format(new Date(user.createdAt), 'PP')}</p>
                 </div>
               )}
             </div>
@@ -230,8 +234,8 @@ export default function ProfilePage() {
 
           {/* Premium Upgrade Card */}
           {user?.role !== 'premium_investigator' && (
-            <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 rounded-xl border border-indigo-500/30 p-5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+            <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-xl border border-indigo-500/20 p-5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
               <h3 className="text-base font-semibold text-white mb-2 flex items-center gap-2 relative z-10">
                 ⭐ Premium Plan
               </h3>

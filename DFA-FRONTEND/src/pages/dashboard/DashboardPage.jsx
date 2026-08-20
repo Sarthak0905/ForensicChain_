@@ -98,22 +98,22 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0B1121] p-6 rounded-2xl border border-slate-800 shadow-sm relative overflow-hidden">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative overflow-hidden">
         {/* Background glow effect */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
+        <div className="absolute top-0 right-0 w-64 h-64 bg-blue-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
         
         <div className="relative z-10">
-          <h1 className="text-2xl font-bold text-white tracking-tight">
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
             Welcome back, {user?.firstName || 'Investigator'}
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-500 mt-1">
             Overview of your forensic evidence and blockchain integrity
           </p>
         </div>
         <div className="relative z-10">
           <Link
             to="/evidence/upload"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-cyan-600 hover:bg-cyan-500 text-white rounded-lg text-sm font-semibold transition-all shadow-lg shadow-cyan-500/20 focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-slate-900"
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all shadow-md shadow-blue-500/20 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white"
           >
             <Upload className="w-4 h-4" />
             Upload Evidence
@@ -126,15 +126,15 @@ export default function DashboardPage() {
         {statCards.map((stat) => (
           <div
             key={stat.label}
-            className="bg-[#0B1121] rounded-2xl border border-slate-800 p-5 hover:border-slate-700 transition-colors"
+            className="bg-white rounded-2xl border border-slate-200 p-5 hover:border-blue-100 hover:shadow-sm transition-all"
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm font-medium text-slate-400">{stat.label}</p>
-                <p className="text-3xl font-bold text-white mt-2 tracking-tight">{stat.value}</p>
+                <p className="text-sm font-medium text-slate-500">{stat.label}</p>
+                <p className="text-3xl font-bold text-slate-900 mt-2 tracking-tight">{stat.value}</p>
               </div>
-              <div className={`p-3 rounded-xl ${stat.bg} border border-white/5`}>
-                <stat.icon className={`w-5 h-5 ${stat.color}`} />
+              <div className={`p-3 rounded-xl ${stat.bg.replace('/20', '/10').replace('/5', '/50')} border border-slate-100`}>
+                <stat.icon className={`w-5 h-5 ${stat.color.replace('400', '600')}`} />
               </div>
             </div>
             <div className="flex items-center gap-1.5 mt-4 text-xs font-medium text-slate-500">
@@ -147,12 +147,12 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Evidence - Enterprise Table format */}
-        <div className="lg:col-span-2 bg-[#0B1121] rounded-2xl border border-slate-800 flex flex-col">
-          <div className="flex items-center justify-between p-5 border-b border-slate-800/60">
-            <h2 className="text-base font-semibold text-white">Recent Evidence Registry</h2>
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+          <div className="flex items-center justify-between p-5 border-b border-slate-100">
+            <h2 className="text-base font-semibold text-slate-900">Recent Evidence Registry</h2>
             <Link
               to="/evidence"
-              className="text-sm font-medium text-cyan-400 hover:text-cyan-300 flex items-center gap-1 px-3 py-1.5 rounded-md hover:bg-cyan-500/10 transition-colors"
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 flex items-center gap-1 px-3 py-1.5 rounded-md hover:bg-blue-50 transition-colors"
             >
               View all <ArrowRight className="w-4 h-4" />
             </Link>
@@ -160,31 +160,31 @@ export default function DashboardPage() {
 
           <div className="flex-1 overflow-x-auto">
             {recentEvidence.length === 0 ? (
-              <div className="text-center py-12 text-slate-500">
-                <FolderLock className="w-12 h-12 mx-auto mb-3 opacity-20" />
+              <div className="text-center py-12 text-slate-400">
+                <FolderLock className="w-12 h-12 mx-auto mb-3 opacity-20 text-slate-300" />
                 <p className="text-sm font-medium">No evidence uploaded yet</p>
               </div>
             ) : (
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-900/50">
-                    <th className="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Asset</th>
-                    <th className="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Type</th>
-                    <th className="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
-                    <th className="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Date</th>
-                    <th className="px-5 py-3"></th>
+                  <tr className="bg-slate-50/50">
+                    <th className="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">Asset</th>
+                    <th className="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">Type</th>
+                    <th className="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">Status</th>
+                    <th className="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider border-b border-slate-200">Date</th>
+                    <th className="px-5 py-3 border-b border-slate-200"></th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-800/60">
+                <tbody className="divide-y divide-slate-100">
                   {recentEvidence.map((ev) => (
-                    <tr key={ev._id || ev.evidenceId} className="hover:bg-slate-800/30 transition-colors group">
+                    <tr key={ev._id || ev.evidenceId} className="hover:bg-slate-50/80 transition-colors group">
                       <td className="px-5 py-4">
                         <div className="flex items-center gap-3">
-                          <div className="p-2 bg-slate-800 rounded-lg">
-                            <FolderLock className="w-4 h-4 text-cyan-400" />
+                          <div className="p-2 bg-blue-50 rounded-lg">
+                            <FolderLock className="w-4 h-4 text-blue-600" />
                           </div>
                           <div>
-                            <Link to={`/evidence/${ev.evidenceId}`} className="text-sm font-medium text-white hover:text-cyan-400 transition-colors">
+                            <Link to={`/evidence/${ev.evidenceId}`} className="text-sm font-semibold text-slate-900 hover:text-blue-600 transition-colors">
                               {ev.title}
                             </Link>
                             <p className="text-xs text-slate-500 font-mono mt-0.5">{ev.evidenceId}</p>
@@ -198,13 +198,13 @@ export default function DashboardPage() {
                         <StatusBadge type="verification" value={ev.verificationStatus} />
                       </td>
                       <td className="px-5 py-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-sm text-slate-400">
+                        <div className="flex items-center gap-1.5 text-sm text-slate-500 font-medium">
                           <Clock className="w-3.5 h-3.5" />
                           {ev.createdAt ? format(new Date(ev.createdAt), 'MMM d, yyyy') : 'Recently'}
                         </div>
                       </td>
                       <td className="px-5 py-4 text-right">
-                        <button className="p-1.5 text-slate-500 hover:text-white hover:bg-slate-700 rounded-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
+                        <button className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors opacity-0 group-hover:opacity-100 focus:opacity-100">
                           <MoreVertical className="w-4 h-4" />
                         </button>
                       </td>
@@ -217,46 +217,46 @@ export default function DashboardPage() {
         </div>
 
         {/* Blockchain Health */}
-        <div className="bg-[#0B1121] rounded-2xl border border-slate-800 p-5 flex flex-col">
+        <div className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col">
           <div className="flex items-center gap-2 mb-6">
-            <div className="p-2 bg-purple-500/10 rounded-lg">
-              <LinkIcon className="w-5 h-5 text-purple-400" />
+            <div className="p-2 bg-purple-50 rounded-lg border border-purple-100">
+              <LinkIcon className="w-5 h-5 text-purple-600" />
             </div>
-            <h2 className="text-base font-semibold text-white">Network Health</h2>
+            <h2 className="text-base font-semibold text-slate-900">Network Health</h2>
           </div>
 
           <div className="flex-1 space-y-5">
-            <div className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-slate-800/50">
+            <div className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
               <div className="relative">
                 {healthStatus ? (
                   <>
-                    <CheckCircle2 className="w-8 h-8 text-emerald-400" />
-                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-400 border-2 border-[#0B1121] rounded-full animate-ping" />
+                    <CheckCircle2 className="w-8 h-8 text-emerald-500" />
+                    <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full animate-ping" />
                   </>
                 ) : (
-                  <XCircle className="w-8 h-8 text-red-400" />
+                  <XCircle className="w-8 h-8 text-red-500" />
                 )}
               </div>
               <div>
-                <p className="text-sm font-semibold text-white">Consensus Status</p>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-sm font-bold text-slate-900">Consensus Status</p>
+                <p className="text-xs text-slate-500 mt-0.5 font-medium">
                   {healthStatus?.status === 'ok' ? 'All nodes synchronized' : 'Synchronization pending'}
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="bg-slate-900/50 rounded-xl border border-slate-800/50 p-4 relative overflow-hidden">
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-purple-500 to-transparent" />
-                <p className="text-xs font-medium text-slate-400 mb-1">Total Blocks</p>
-                <p className="text-2xl font-bold text-white tracking-tight">
+                <p className="text-xs font-semibold text-slate-500 mb-1">Total Blocks</p>
+                <p className="text-2xl font-bold text-slate-900 tracking-tight">
                   {blockchainStats?.totalBlocks || blockchainStats?.stats?.totalBlocks || 0}
                 </p>
               </div>
-              <div className="bg-slate-900/50 rounded-xl border border-slate-800/50 p-4 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-transparent" />
-                <p className="text-xs font-medium text-slate-400 mb-1">Latest Hash</p>
-                <p className="text-2xl font-bold text-white tracking-tight">
+              <div className="bg-slate-50 rounded-xl border border-slate-200 p-4 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-transparent" />
+                <p className="text-xs font-semibold text-slate-500 mb-1">Latest Hash</p>
+                <p className="text-2xl font-bold text-slate-900 tracking-tight">
                   #{blockchainStats?.latestBlock || blockchainStats?.stats?.latestBlock || 0}
                 </p>
               </div>
@@ -266,7 +266,7 @@ export default function DashboardPage() {
           <div className="mt-6">
             <Link
               to="/blockchain"
-              className="flex items-center justify-center w-full py-2.5 bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/20 rounded-xl text-sm font-semibold transition-colors focus:ring-2 focus:ring-purple-500/50"
+              className="flex items-center justify-center w-full py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 rounded-xl text-sm font-bold transition-colors focus:ring-2 focus:ring-purple-500/50 shadow-sm"
             >
               Verify Ledger Integrity
             </Link>

@@ -34,49 +34,49 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         {/* Brand */}
         <div className="text-center mb-8">
-          <Shield className="w-12 h-12 text-cyan-500 mx-auto mb-3" />
-          <h1 className="text-2xl font-bold text-white">Forensic Chain</h1>
-          <p className="text-slate-400 text-sm mt-1">DFA-AOKGE Security System</p>
+          <Shield className="w-12 h-12 text-blue-600 mx-auto mb-3" />
+          <h1 className="text-2xl font-bold text-slate-900">Forensic Chain</h1>
+          <p className="text-slate-500 text-sm mt-1">DFA-AOKGE Security System</p>
         </div>
 
         {/* Form */}
-        <div className="bg-slate-900 rounded-xl border border-slate-700/50 p-6 shadow-xl">
-          <h2 className="text-lg font-semibold text-white mb-6">Sign in to your account</h2>
+        <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-900 mb-6">Sign in to your account</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
               <input
                 type="email"
                 name="email"
                 value={form.email}
                 onChange={handleChange}
-                className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                 placeholder="investigator@example.com"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-300 mb-1.5">Password</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">Password</label>
               <div className="relative">
                 <input
                   type={showPassword ? 'text' : 'password'}
                   name="password"
                   value={form.password}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors pr-10"
+                  className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors pr-10"
                   placeholder="••••••••"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                 >
                   {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                 </button>
@@ -88,7 +88,7 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowAdvanced(!showAdvanced)}
-                className="flex items-center gap-1 text-sm text-slate-400 hover:text-cyan-400 transition-colors"
+                className="flex items-center gap-1 text-sm text-slate-500 hover:text-blue-600 transition-colors"
               >
                 {showAdvanced ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 Advanced Security (SBVM)
@@ -100,7 +100,7 @@ export default function LoginPage() {
                     name="secretCode"
                     value={form.secretCode}
                     onChange={handleChange}
-                    className="w-full px-3 py-2.5 bg-slate-800 border border-slate-600 rounded-lg text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 focus:border-cyan-500 transition-colors"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-colors"
                     placeholder="SBVM Secret Code (optional)"
                   />
                 </div>
@@ -110,7 +110,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 bg-cyan-600 hover:bg-cyan-700 disabled:bg-cyan-800 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2"
+              className="w-full py-2.5 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
             >
               {loading ? (
                 <>
@@ -124,9 +124,9 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-4 text-center">
-            <p className="text-sm text-slate-400">
+            <p className="text-sm text-slate-500">
               Don't have an account?{' '}
-              <Link to="/register" className="text-cyan-400 hover:text-cyan-300 font-medium">
+              <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
                 Register
               </Link>
             </p>
