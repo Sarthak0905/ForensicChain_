@@ -3,31 +3,23 @@ const User = require('../models/User');
 const EncryptionUtils = require('../utils/encryption');
 const BlockchainUtils = require('../utils/blockchain');
 const s3Utils = require('../utils/s3');
+const cloudinaryUtils = require('../utils/cloudinary');
 const mailer = require('../utils/mailer');
 const { v4: uuidv4 } = require('uuid');
-
-// ...
-// Down to verifyEvidenceIntegrity
-// I will use replace_file_content carefully.
 
 // Upload evidence with encryption
 const uploadEvidence = async (req, res) => {
   try {
-    const { caseId, title, description, type, tags } = req.body;
-    const investigatorId = req.user.id;
+    const { caseId, title, type, description, tags } = req.body;
     const file = req.file;
-
-    if (!caseId || !title || !type) {
-      return res.status(400).json({ error: 'Case ID, title, and type are required' });
-    }
+    const investigatorId = req.user.id;
 
     if (!file) {
       return res.status(400).json({ error: 'Evidence file is required' });
     }
 
-    // Parse tags if it's a string from FormData
-    let parsedTags = tags;
-    if (typeof tags === 'string') {
+    let parsedTags = [];
+    if (tags) {
       try { parsedTags = JSON.parse(tags); } catch (e) { parsedTags = tags.split(','); }
     }
 
@@ -40,21 +32,34 @@ const uploadEvidence = async (req, res) => {
     // Encrypt file buffer with AES-256-GCM
     const encryptedObject = EncryptionUtils.encryptFile(file.buffer, masterKey);
 
-    // Convert encrypted hex string back to buffer for S3 upload
+    // Convert encrypted hex string back to buffer for cloud upload
     const encryptedBuffer = Buffer.from(encryptedObject.data, 'hex');
 
     // Create unique evidence record ID
     const evidenceId = `EV-${uuidv4()}`;
 
-    // Upload encrypted buffer to AWS S3
-    const s3Key = await s3Utils.uploadToS3(encryptedBuffer, evidenceId, 'application/octet-stream');
+    // Upload encrypted buffer to Cloud Storage
+    let storageLocation = '';
+    let cloudProvider = '';
+
+    if (cloudinaryUtils.hasCloudinaryCredentials) {
+      // 1. Prioritize Cloudinary if credentials exist
+      const secureUrl = await cloudinaryUtils.uploadToCloudinary(encryptedBuffer, evidenceId);
+      storageLocation = secureUrl; 
+      cloudProvider = 'cloudinary';
+    } else {
+      // 2. Fallback to AWS S3 (or local disk if S3 is missing)
+      const s3Key = await s3Utils.uploadToS3(encryptedBuffer, evidenceId, 'application/octet-stream');
+      storageLocation = s3Key;
+      cloudProvider = 'aws-s3';
+    }
 
     const newEvidence = new Evidence({
-      evidenceId: evidenceId,
-      caseId: caseId,
-      title: title,
-      description: description,
-      type: type,
+      evidenceId,
+      caseId,
+      title,
+      description,
+      type,
       fileInfo: {
         originalName: file.originalname,
         mimeType: file.mimetype,
@@ -66,7 +71,7 @@ const uploadEvidence = async (req, res) => {
         encryptedDataHash: EncryptionUtils.generateHash(encryptedObject.data),
         encryptionMethod: 'AES-256-GCM',
         keyIndex: 0,
-        multipleKeys: [masterKey], // Store the main key for this demo (in production, use a secure key vault)
+        multipleKeys: [masterKey], 
         iv: encryptedObject.iv,
         authTag: encryptedObject.authTag
       },
@@ -74,8 +79,8 @@ const uploadEvidence = async (req, res) => {
       integrityHash: integrityHash,
       tags: parsedTags || [],
       storageInfo: {
-        cloudProvider: 'aws-s3',
-        storageLocation: s3Key
+        cloudProvider: cloudProvider,
+        storageLocation: storageLocation
       },
       chainOfCustody: [
         {
@@ -141,13 +146,17 @@ const retrieveEvidence = async (req, res) => {
       return res.status(403).json({ error: 'Access denied to this evidence' });
     }
 
-    // Generate secure pre-signed URL for the encrypted file in S3
+    // Generate secure pre-signed URL for the encrypted file in S3, or direct URL for Cloudinary
     let downloadUrl = null;
-    if (evidence.storageInfo && evidence.storageInfo.cloudProvider === 'aws-s3') {
+    if (evidence.storageInfo) {
       try {
-        downloadUrl = await s3Utils.getSignedDownloadUrl(evidence.storageInfo.storageLocation);
+        if (evidence.storageInfo.cloudProvider === 'cloudinary') {
+          downloadUrl = evidence.storageInfo.storageLocation; // Cloudinary returns secure public url
+        } else if (evidence.storageInfo.cloudProvider === 'aws-s3') {
+          downloadUrl = await s3Utils.getSignedDownloadUrl(evidence.storageInfo.storageLocation);
+        }
       } catch (e) {
-        console.error('Error generating signed URL:', e);
+        console.error('Error getting download URL:', e);
       }
     }
 
