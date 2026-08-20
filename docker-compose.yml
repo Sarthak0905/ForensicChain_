@@ -19,12 +19,8 @@ services:
     container_name: dfa-backend
     ports:
       - "5000:5000"
-    environment:
-      - PORT=5000
-      - MONGODB_URI=mongodb://mongodb:27017/digital-forensic
-      - JWT_SECRET=your_jwt_secret_key_here
-      - ALLOWED_ORIGINS=http://localhost:3000
-      # Firebase and AWS configs will be passed here as well
+    env_file:
+      - ./DFA-BACKEND/.env
     depends_on:
       - mongodb
     networks:
@@ -37,9 +33,9 @@ services:
       dockerfile: Dockerfile
     container_name: dfa-frontend
     ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://localhost:5000/api
+      - "3000:80"
+    env_file:
+      - ./DFA-FRONTEND/.env
     depends_on:
       - backend
     networks:
