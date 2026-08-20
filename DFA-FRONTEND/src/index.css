@@ -1,0 +1,36 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-forensic-900: #0a1628;
+  --color-forensic-800: #111d35;
+  --color-forensic-700: #1a2744;
+  --color-forensic-600: #243352;
+  --color-forensic-500: #2e4068;
+  --color-forensic-accent: #06b6d4;
+  --color-forensic-success: #10b981;
+  --color-forensic-warning: #f59e0b;
+  --color-forensic-danger: #ef4444;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #334155 #0f172a;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
