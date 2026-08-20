@@ -4,6 +4,7 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const evidenceRoutes = require('./routes/evidence');
+const paymentRoutes = require('./routes/payments');
 const { errorHandler } = require('./middleware/auth');
 const BlockchainUtils = require('./utils/blockchain');
 const setupSwagger = require('./config/swagger');

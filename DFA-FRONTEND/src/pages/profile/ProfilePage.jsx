@@ -228,6 +228,63 @@ export default function ProfilePage() {
             </div>
           </div>
 
+          {/* Premium Upgrade Card */}
+          {user?.role !== 'premium_investigator' && (
+            <div className="bg-gradient-to-br from-indigo-900/50 to-purple-900/50 rounded-xl border border-indigo-500/30 p-5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/20 rounded-full blur-2xl -translate-y-1/2 translate-x-1/2"></div>
+              <h3 className="text-base font-semibold text-white mb-2 flex items-center gap-2 relative z-10">
+                ⭐ Premium Plan
+              </h3>
+              <p className="text-sm text-indigo-200 mb-4 relative z-10">
+                Upgrade your account for advanced forensic tools, unlimited storage, and priority blockchain audits.
+              </p>
+              <button
+                onClick={async () => {
+                  try {
+                    const { paymentAPI } = await import('../../api/axios');
+                    // Create Order
+                    const res = await paymentAPI.createOrder({ amount: 999 }); // ₹999
+                    const data = res.data;
+                    
+                    const options = {
+                      key: data.keyId,
+                      amount: data.amount,
+                      currency: data.currency,
+                      name: 'ForensicChain Enterprise',
+                      description: 'Premium Investigator Upgrade',
+                      order_id: data.orderId,
+                      handler: async function (response) {
+                        try {
+                          await paymentAPI.verify({
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature
+                          });
+                          window.location.reload(); // Reload to reflect new role
+                        } catch (err) {
+                          alert('Payment verification failed');
+                        }
+                      },
+                      prefill: {
+                        name: `${user?.firstName} ${user?.lastName}`,
+                        email: user?.email,
+                      },
+                      theme: { color: '#06b6d4' }
+                    };
+                    const rzp = new window.Razorpay(options);
+                    rzp.open();
+                  } catch (err) {
+                    console.error(err);
+                    alert('Could not initialize payment gateway');
+                  }
+                }}
+                className="w-full py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-semibold rounded-lg text-sm transition-colors relative z-10 shadow-lg shadow-indigo-500/20"
+              >
+                Upgrade Now (₹999)
+              </button>
+            </div>
+          )}
+
           {/* SBVM Info */}
           {user?.sbvm && (
             <div className="bg-slate-900 rounded-xl border border-slate-700/50 p-5">
