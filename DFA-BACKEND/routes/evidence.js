@@ -46,6 +46,18 @@ router.use(authenticateToken);
 // Upload evidence with file
 router.post('/upload', upload.single('file'), evidenceController.uploadEvidence);
 
+// Fallback route to serve local files if AWS S3 is not configured
+const path = require('path');
+const fs = require('fs');
+router.get('/download-local/:fileName', (req, res) => {
+  const filePath = path.join(__dirname, '../uploads', req.params.fileName);
+  if (fs.existsSync(filePath)) {
+    res.download(filePath);
+  } else {
+    res.status(404).send('File not found');
+  }
+});
+
 // Get evidence list
 router.get('/list', evidenceController.getEvidenceList);
 
