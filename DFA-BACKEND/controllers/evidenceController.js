@@ -26,24 +26,17 @@ const uploadEvidence = async (req, res) => {
       try { parsedTags = JSON.parse(tags); } catch (e) { parsedTags = tags.split(','); }
     }
 
-    // Generate encryption keys using EEO-style optimization
+    // Get encryption key (ensure it's 64 hex chars for 32 bytes)
     const masterKey = EncryptionUtils.generateOptimalKey(`${caseId}-${title}-${Date.now()}`, 100);
-    const additionalKey = EncryptionUtils.generateRandomKey(32);
 
-    // Get file buffer as base64 string
-    const fileBase64 = file.buffer.toString('base64');
+    // Generate hash for integrity based on original file buffer
+    const integrityHash = EncryptionUtils.generateHash(file.buffer.toString('base64'));
 
-    // Encrypt with multiple keys (MKHE)
-    const encryptedData = EncryptionUtils.encryptWithMultipleKeys(
-      fileBase64,
-      [masterKey, additionalKey]
-    );
+    // Encrypt file buffer with AES-256-GCM
+    const encryptedObject = EncryptionUtils.encryptFile(file.buffer, masterKey);
 
-    // The encrypted data is a string. Convert back to buffer for S3 upload
-    const encryptedBuffer = Buffer.from(encryptedData, 'utf-8');
-
-    // Generate hash for integrity based on original file base64
-    const integrityHash = EncryptionUtils.generateHash(fileBase64);
+    // Convert encrypted hex string back to buffer for S3 upload
+    const encryptedBuffer = Buffer.from(encryptedObject.data, 'hex');
 
     // Create unique evidence record ID
     const evidenceId = `EV-${uuidv4()}`;
@@ -60,15 +53,17 @@ const uploadEvidence = async (req, res) => {
       fileInfo: {
         originalName: file.originalname,
         mimeType: file.mimetype,
-        size: file.size, // Original size
-        hash: EncryptionUtils.generateHash(fileBase64),
+        size: file.size,
+        hash: integrityHash,
         uploadedDate: new Date()
       },
       encryptionInfo: {
-        encryptedDataHash: EncryptionUtils.generateHash(encryptedData),
-        encryptionMethod: 'AES-256-GCM-MKHE',
+        encryptedDataHash: EncryptionUtils.generateHash(encryptedObject.data),
+        encryptionMethod: 'AES-256-GCM',
         keyIndex: 0,
-        multipleKeys: [masterKey, additionalKey]
+        multipleKeys: [masterKey], // Store the main key for this demo (in production, use a secure key vault)
+        iv: encryptedObject.iv,
+        authTag: encryptedObject.authTag
       },
       investigator: investigatorId,
       integrityHash: integrityHash,
@@ -205,17 +200,22 @@ const decryptEvidence = async (req, res) => {
       return res.status(400).json({ error: 'Encrypted data buffer is required for decryption' });
     }
 
-    // Decrypt data
+    // Decrypt data using AES-256-GCM
     try {
-      const decryptedData = EncryptionUtils.decryptWithMultipleKeys(
-        encryptedDataBuffer,
-        evidence.encryptionInfo.multipleKeys
+      const decryptedDataString = EncryptionUtils.decryptFile(
+        encryptedDataBuffer.toString('hex'), // Convert the passed buffer to hex
+        evidence.encryptionInfo.multipleKeys[0], // The master key
+        evidence.encryptionInfo.iv,
+        evidence.encryptionInfo.authTag
       );
+      
+      // Convert decrypted string back to base64 so frontend can handle it
+      const decryptedBase64 = Buffer.from(decryptedDataString, 'utf8').toString('base64');
 
       res.json({
         success: true,
         message: 'Evidence decrypted successfully',
-        data: decryptedData // This will be the base64 string
+        data: decryptedBase64
       });
     } catch (decryptError) {
       res.status(400).json({ error: 'Decryption failed', details: decryptError.message });

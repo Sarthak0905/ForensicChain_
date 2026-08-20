@@ -11,7 +11,7 @@ class EncryptionUtils {
       key = CryptoJS.SHA256(key + Math.random()).toString();
     }
 
-    return key.substring(0, 32); // 256-bit key
+    return key; // 256-bit key in hex (64 characters)
   }
 
   // Multi-Key Homomorphic Encryption (MKHE) Simplified
