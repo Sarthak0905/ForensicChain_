@@ -3,7 +3,12 @@ const User = require('../models/User');
 const EncryptionUtils = require('../utils/encryption');
 const BlockchainUtils = require('../utils/blockchain');
 const s3Utils = require('../utils/s3');
+const mailer = require('../utils/mailer');
 const { v4: uuidv4 } = require('uuid');
+
+// ...
+// Down to verifyEvidenceIntegrity
+// I will use replace_file_content carefully.
 
 // Upload evidence with encryption
 const uploadEvidence = async (req, res) => {
@@ -249,6 +254,22 @@ const verifyEvidenceIntegrity = async (req, res) => {
     evidence.verificationStatus = isVerified ? 'verified' : 'compromised';
 
     await evidence.save();
+    
+    // Send email alert if evidence is compromised
+    if (!isVerified) {
+      // Find admin users to alert, or just alert the investigator
+      const investigator = await User.findById(evidence.investigator);
+      if (investigator && investigator.email) {
+        await mailer.sendAlertEmail(
+          investigator.email,
+          `⚠️ ALERT: Evidence Integrity Compromised [${evidence.evidenceId}]`,
+          `<h3>Security Alert</h3>
+           <p>The integrity check for evidence <strong>${evidence.title} (${evidence.evidenceId})</strong> has failed.</p>
+           <p><strong>Reason:</strong> ${blockchainStatus.message || 'Hash mismatch detected.'}</p>
+           <p>Please review the chain of custody immediately.</p>`
+        );
+      }
+    }
 
     res.json({
       success: true,

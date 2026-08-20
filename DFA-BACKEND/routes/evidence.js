@@ -13,6 +13,36 @@ const upload = multer({
 // All evidence routes require authentication
 router.use(authenticateToken);
 
+/**
+ * @swagger
+ * /api/evidence/upload:
+ *   post:
+ *     summary: Upload and encrypt new evidence
+ *     tags: [Evidence]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               caseId:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       201:
+ *         description: Evidence securely uploaded and encrypted
+ */
 // Upload evidence with file
 router.post('/upload', upload.single('file'), evidenceController.uploadEvidence);
 

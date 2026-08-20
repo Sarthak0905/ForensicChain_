@@ -6,8 +6,16 @@ const authRoutes = require('./routes/auth');
 const evidenceRoutes = require('./routes/evidence');
 const { errorHandler } = require('./middleware/auth');
 const BlockchainUtils = require('./utils/blockchain');
+const setupSwagger = require('./config/swagger');
 
+// Initialize Express app
 const app = express();
+
+// Connect to MongoDB
+connectDB();
+
+// Setup Swagger API Documentation
+setupSwagger(app);
 
 // Middleware
 app.use(cors({
